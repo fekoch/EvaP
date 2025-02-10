@@ -319,13 +319,13 @@ class TestDropoutQuestionnaire(WebTest):
                     self.assertEqual(
                         fields[0].value,
                         "",
-                        f"Answers to Questions in the general contribution should be set to NO_ANSWER (eg. {NO_ANSWER})",
+                        f"Answers to textarea-Questions in the general contribution should be empty",
                     )
                 else:
                     self.assertEqual(
                         fields[0].value,
                         str(NO_ANSWER),
-                        f"Answers to Questions in the general contribution should be set to NO_ANSWER (eg. {NO_ANSWER})",
+                        f"Answers to Questions in the general contribution should be set to NO_ANSWER",
                     )
 
     def test_choosing_dropout_sets_to_no_answer(self):
@@ -356,7 +356,7 @@ class TestDropoutQuestionnaire(WebTest):
         )
 
     def test_dropping_out_increments_dropout_counter(self):
-        self.assertEqual(self.evaluation.dropout_count, 0, "dropout_count should be initially zero")
+        self.assertEqual(self.evaluation.dropout_count, 0, "dropout count should be initially zero")
 
         form = self.app.get(url=reverse("student:drop", args=[self.evaluation.id]), user=self.user, status=200).forms[
             "student-vote-form"
@@ -372,5 +372,5 @@ class TestDropoutQuestionnaire(WebTest):
         form.submit()
         evaluation = Evaluation.objects.get(pk=self.evaluation.pk)
 
-        self.assertEqual(evaluation.dropout_count, 1, "dropout_count should not change on normal vote")
+        self.assertEqual(evaluation.dropout_count, 1, "dropout count should not change on normal vote")
         self.assertEqual(self.evaluation.dropout_count, 0, "other evaluation should not have been changed")

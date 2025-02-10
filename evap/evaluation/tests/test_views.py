@@ -319,13 +319,13 @@ class TestDropoutQuestionnaire(WebTest):
                     self.assertEqual(
                         fields[0].value,
                         "",
-                        f"Answers to textarea-Questions in the general contribution should be empty",
+                        "Answers to textarea-Questions in the general contribution should be empty",
                     )
                 else:
                     self.assertEqual(
                         fields[0].value,
                         str(NO_ANSWER),
-                        f"Answers to Questions in the general contribution should be set to NO_ANSWER",
+                        "Answers to Questions in the general contribution should be set to NO_ANSWER",
                     )
 
     def test_choosing_dropout_sets_to_no_answer(self):

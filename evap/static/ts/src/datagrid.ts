@@ -123,7 +123,10 @@ abstract class DataGrid {
         return rows;
     }
 
-    protected abstract findSearchableCells(row: HTMLElement): HTMLElement[];
+    protected findSearchableCells(row: HTMLElement): HTMLElement[] {
+        const elements = [...row.children] as HTMLElement[];
+        return elements.filter(element => !element.hasAttribute("data-not-searchable"));
+    }
 
     protected abstract fetchRowFilterValues(row: HTMLElement): Map<string, string[]>;
 
@@ -240,7 +243,6 @@ interface TableGridParameters extends BaseParameters {
 
 // Table based data grid which uses its head and body
 export class TableGrid extends DataGrid {
-    private searchableColumnIndices: number[];
 
     constructor({ table, ...options }: TableGridParameters) {
         const thead: HTMLElement = selectOrError("thead", table);
@@ -249,21 +251,10 @@ export class TableGrid extends DataGrid {
             container: table.querySelector("tbody")!,
             ...options,
         });
-        this.searchableColumnIndices = [];
-
-        thead.querySelectorAll("th").forEach((header, index) => {
-            if (!header.hasAttribute("data-not-searchable")) {
-                this.searchableColumnIndices.push(index);
-            }
-        });
     }
 
-    protected findSearchableCells(row: HTMLElement): HTMLElement[] {
-        return this.searchableColumnIndices.map(index => {
-            const child = row.children[index];
-            assert(child instanceof HTMLElement);
-            return child;
-        });
+    public bindEvents() {
+        super.bindEvents();
     }
 
     protected fetchRowFilterValues(_row: HTMLElement): Map<string, string[]> {
@@ -279,16 +270,21 @@ export class TableGrid extends DataGrid {
     }
 }
 
-interface EvaluationGridParameters extends TableGridParameters {
+interface EvaluationGridParameters extends DataGridParameters {
     filterButtons: HTMLButtonElement[];
+    resetFilterButton: HTMLButtonElement;
 }
 
-export class EvaluationGrid extends TableGrid {
+export class EvaluationGrid extends DataGrid {
+    // TODO: rename class
+    // TODO: maybe merge with some others?
     private filterButtons: HTMLButtonElement[];
+    private resetFilterButton: HTMLButtonElement;
 
-    constructor({ filterButtons, ...options }: EvaluationGridParameters) {
+    constructor({ filterButtons, resetFilterButton, ...options }: EvaluationGridParameters) {
         super(options);
         this.filterButtons = filterButtons;
+        this.resetFilterButton = resetFilterButton;
     }
 
     public bindEvents() {
@@ -311,6 +307,16 @@ export class EvaluationGrid extends TableGrid {
                 this.filterRows();
                 this.renderToDOM();
             });
+        });
+
+        this.resetFilterButton.addEventListener("click", () => {
+            this.state.search = "";
+            this.state.equalityFilter.clear();
+            this.filterButtons.forEach(button => button.classList.remove("active"));
+            this.state.rangeFilter.clear();
+            this.filterRows();
+            this.renderToDOM();
+            this.reflectFilterStateOnInputs();
         });
     }
 

@@ -261,9 +261,11 @@ jobs:
 
   visual-regression-tests:
     runs-on: ubuntu-22.04
-
     name: Visual Regression Tests
-
+    env:
+      VRT_APIURL: ${{ secrets.VRT_APIURL }}
+      VRT_APIKEY: ${{ secrets.VRT_APIKEY }}
+      VRT_PROJECT: ${{ secrets.VRT_PROJECT }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/setup_evap
@@ -271,8 +273,3 @@ jobs:
           npm-ci: true
       - name: Run visual regression tests
         run: python manage.py vrt_test
-        env:
-          VRT_APIURL: ${{ secrets.VRT_APIURL }}
-          VRT_APIKEY: ${{ secrets.VRT_APIKEY }}
-          VRT_PROJECT: ${{ secrets.VRT_PROJECT }}
-          

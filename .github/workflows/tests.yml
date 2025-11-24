@@ -263,8 +263,8 @@ jobs:
     runs-on: ubuntu-22.04
     name: Visual Regression Tests
     env:
-      VRT_APIURL: ${{ secrets.VRT_APIURL }}
-      VRT_APIKEY: ${{ secrets.VRT_APIKEY }}
+      VRT_APIURL: "https://example.com"
+      VRT_APIKEY: "superSecretKey"
       VRT_PROJECT: ${{ secrets.VRT_PROJECT }}
     steps:
       - uses: actions/checkout@v5

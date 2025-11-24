@@ -258,3 +258,16 @@ jobs:
       - uses: ./.github/setup_evap
         with:
           start-db: true
+
+  visual-regression-tests:
+    runs-on: ubuntu-22.04
+
+    name: Visual Regression Tests
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/setup_evap
+        with:
+          npm-ci: true
+      - name: Run visual regression tests
+        run: python manage.py vrt_test

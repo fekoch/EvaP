@@ -21,19 +21,22 @@ jobs:
             const username = 'anonymous';
             
             const isCollaborator = await github.rest.repos.checkCollaborator({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              username: username
-            }).then(({status}) => status === 204).catch((error) => {
-                console.error("Error while checking priveleges:")
-                //console.error(error)
-                return false;
-            });
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: username
+            })
+                .then(({status}) => status === 204)
+                .catch((error) => {
+                    if (error.status === 404) return false;
+                    throw error;
+                });
             
             if(!isCollaborator) {
               console.error(`Insufficient privileges, ${username} is not a collaborator`);
               process.exit(1)
             }
+            
+            console.log(`User ${username} is a project collaborator, continuing...`)
 
       - name: Checkout code
         uses: actions/checkout@v6

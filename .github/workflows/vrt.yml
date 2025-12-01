@@ -1,6 +1,7 @@
 name: Visual Regression Testing
 on:
-  pull_request:
+  pull_request_target:
+    types: [opened, synchronize]
 jobs:
   visual-regression-tests:
     runs-on: ubuntu-22.04
@@ -11,7 +12,29 @@ jobs:
       VRT_APIKEY: "superSecretKey"
       VRT_PROJECT: ${{ secrets.VRT_PROJECT }}
     steps:
-      - uses: actions/checkout@v5
+      - name: Check if user is collaborator
+        uses: actions/github-script@v8
+        env:
+          TRIGGERING_USERNAME: ${{ github.triggering_actor }}
+        with:
+          script: |
+            const username = process.env.USERNAME;
+            
+            const isCollaborator = await github.rest.repos.checkCollaborator({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: username
+            }).then(({status}) => status === 204);
+            
+            if(!isCollaborator) {
+              console.error(`Insufficient privileges, ${username} is not a collaborator`);
+              process.exit(1)
+            }
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: ./.github/setup_evap
         with:
           npm-ci: true

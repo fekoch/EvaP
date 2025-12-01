@@ -262,6 +262,7 @@ jobs:
   visual-regression-tests:
     runs-on: ubuntu-22.04
     name: Visual Regression Tests
+    environment: vrt
     permissions:
       contents: read
     env:

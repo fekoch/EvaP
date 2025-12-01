@@ -6,7 +6,6 @@ jobs:
   visual-regression-tests:
     runs-on: ubuntu-22.04
     name: Visual Regression Tests
-    environment: vrt
     env:
       VRT_APIURL: "https://example.com"
       VRT_APIKEY: "superSecretKey"

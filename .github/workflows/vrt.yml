@@ -1,4 +1,4 @@
-name: Visual Regression Testing
+name: Visual Test Suite
 on:
   pull_request_target:
     types: [opened, synchronize]

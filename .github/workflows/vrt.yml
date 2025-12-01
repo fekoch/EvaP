@@ -17,7 +17,8 @@ jobs:
           TRIGGERING_USERNAME: ${{ github.triggering_actor }}
         with:
           script: |
-            const username = process.env.TRIGGERING_USERNAME;
+            //const username = process.env.TRIGGERING_USERNAME;
+            const username = 'anonymous';
             
             const isCollaborator = await github.rest.repos.checkCollaborator({
               owner: context.repo.owner,

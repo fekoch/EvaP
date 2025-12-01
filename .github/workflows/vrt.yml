@@ -23,7 +23,11 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               username: username
-            }).then(({status}) => status === 204);
+            }).then(({status}) => status === 204).catch((error) => {
+                console.error("Error while checking priveleges:")
+                console.error(error)
+                return false;
+            });
             
             if(!isCollaborator) {
               console.error(`Insufficient privileges, ${username} is not a collaborator`);

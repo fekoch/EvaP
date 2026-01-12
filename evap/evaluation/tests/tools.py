@@ -17,7 +17,7 @@ from django.contrib.auth.models import Group
 from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.db import DEFAULT_DB_ALIAS, connections
 from django.http.request import HttpRequest, QueryDict
-from django.test import override_settings
+from django.test import override_settings, tag
 from django.test.runner import DiscoverRunner
 from django.test.selenium import SeleniumTestCase
 from django.test.utils import CaptureQueriesContext
@@ -46,7 +46,7 @@ from evap.evaluation.models import (
 
 
 class EvapTestRunner(DiscoverRunner):
-    """Skips selenium tests by default, if no other tags are specified."""
+    """Skips selenium and vrt tests by default, if no other tags are specified."""
 
     def __init__(self, *args: Any, headed=False, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -54,7 +54,7 @@ class EvapTestRunner(DiscoverRunner):
         self.__headed = headed
 
         if not self.tags and not self.exclude_tags:
-            self.exclude_tags = {"selenium"}
+            self.exclude_tags = {"selenium", "vrt"}
 
     @classmethod
     def add_arguments(cls, parser):
@@ -365,6 +365,7 @@ class LiveServerTest(SeleniumTestCase):
         cls.selenium.set_window_size(*cls.window_size)
 
 
+@tag("vrt")
 @override_settings(SLOGANS_EN=["Einigermaßen verlässlich aussehende Pixeltestung"])
 class VisualRegressionTestCase(LiveServerTest):
     window_size = (1920, 1080)
@@ -372,7 +373,7 @@ class VisualRegressionTestCase(LiveServerTest):
     _freezer : Any
 
     # removes the "selenium" tag inherited from LiveServerTest > SeleniumTestCase to prevent accidental test execution
-    tags = set("vrt")
+    #tags = set("vrt")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

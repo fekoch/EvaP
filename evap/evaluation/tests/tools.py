@@ -369,6 +369,7 @@ class LiveServerTest(SeleniumTestCase):
 class VisualRegressionTestCase(LiveServerTest):
     window_size = (1920, 1080)
     _http_timeout_seconds = 3
+    _freezer : Any
 
     # removes the "selenium" tag inherited from LiveServerTest > SeleniumTestCase to prevent accidental test execution
     tags = set("vrt")
@@ -395,13 +396,13 @@ class VisualRegressionTestCase(LiveServerTest):
     def setUpClass(cls) -> None:
         super().setUpClass()
 
-        cls.freezer = freeze_time("2025-10-27")
-        cls.freezer.start()
+        cls._freezer = freeze_time("2025-10-27")
+        cls._freezer.start()
 
     @classmethod
     def tearDownClass(cls) -> None:
         super().tearDownClass()
-        cls.freezer.stop()
+        cls._freezer.stop()
 
     @property
     def viewport(self):

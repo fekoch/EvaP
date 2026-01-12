@@ -183,7 +183,6 @@ class ParticipantCollapseTests(LiveServerTest):
 
 
 class StaffSemesterViewRegressionTest(VisualRegressionTestCase):
-
     def test_regression(self):
         baker.seed(31902)
 

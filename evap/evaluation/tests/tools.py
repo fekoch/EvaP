@@ -421,6 +421,7 @@ class VisualRegressionTestCase(LiveServerTest):
             data=json.dumps(self.data),
             headers=self.headers,
             timeout=self._http_timeout_seconds,
+            verify=False,
         )
 
         registration_response.raise_for_status()
@@ -433,6 +434,7 @@ class VisualRegressionTestCase(LiveServerTest):
             data={},
             headers=self.headers,
             timeout=self._http_timeout_seconds,
+            verify=False,
         ).raise_for_status()
 
     def _post_screenshot(self, name) -> tuple[str, str]:
@@ -448,6 +450,7 @@ class VisualRegressionTestCase(LiveServerTest):
             data=json.dumps(test_data),
             headers=self.headers,
             timeout=self._http_timeout_seconds,
+            verify=False
         )
 
         test_response.raise_for_status()

@@ -14,6 +14,13 @@
             padding: 0.5rem 0.3rem 0.5rem 0.3rem;
             border: 0 solid $table-border-color;
             border-bottom-width: 1px;
+
+            // margin or gap on gridcells breaks the striped row-background
+            margin: 0 !important;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         &:nth-child(even) > .gridCell {

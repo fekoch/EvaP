@@ -66,7 +66,7 @@ abstract class DataGrid {
         this.delayTimer = undefined;
         this.searchInput.addEventListener("input", () => {
             clearTimeout(this.delayTimer);
-            this.delayTimer = setTimeout(() => {
+            this.delayTimer = window.setTimeout(() => {
                 this.state.search = this.searchInput.value;
                 this.filterRows();
                 this.renderToDOM();

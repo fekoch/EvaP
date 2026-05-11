@@ -275,11 +275,11 @@ $course-grid-areas: name, badges, responsible, evaluation-count;
     @return $result;
 }
 
-@each $col in join-multiple($results-grid-areas, $textanswer-review-grid-areas, $evaluation-grid-areas, $grades-grid-areas, $course-grid-areas) {
-    [data-col=#{$col}] {
-        grid-area: $col;
-    }
-}
+//@each $col in join-multiple($results-grid-areas, $textanswer-review-grid-areas, $evaluation-grid-areas, $grades-grid-areas, $course-grid-areas) {
+//    [data-col=#{$col}] {
+//        grid-area: $col;
+//    }
+//}
 
 .col-order {
     display: block;
